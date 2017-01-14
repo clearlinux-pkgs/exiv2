@@ -4,7 +4,7 @@
 #
 Name     : exiv2
 Version  : 0.25
-Release  : 1
+Release  : 2
 URL      : http://www.exiv2.org/exiv2-0.25.tar.gz
 Source0  : http://www.exiv2.org/exiv2-0.25.tar.gz
 Summary  : Image metadata library and tools
@@ -14,6 +14,7 @@ Requires: exiv2-bin
 Requires: exiv2-lib
 BuildRequires : cmake
 BuildRequires : expat-dev
+BuildRequires : zlib-dev
 
 %description
 Exiv2

@@ -4,7 +4,7 @@
 #
 Name     : exiv2
 Version  : 0.25
-Release  : 2
+Release  : 3
 URL      : http://www.exiv2.org/exiv2-0.25.tar.gz
 Source0  : http://www.exiv2.org/exiv2-0.25.tar.gz
 Summary  : Image metadata library and tools
@@ -54,6 +54,7 @@ lib components for the exiv2 package.
 
 %build
 export LANG=C
+export SOURCE_DATE_EPOCH=1484507381
 mkdir clr-build
 pushd clr-build
 cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=%{_libdir} -DCMAKE_AR=/usr/bin/gcc-ar -DLIB_SUFFIX=64 -DCMAKE_RANLIB=/usr/bin/gcc-ranlib
@@ -61,6 +62,7 @@ make VERBOSE=1  %{?_smp_mflags}
 popd
 
 %install
+export SOURCE_DATE_EPOCH=1484507381
 rm -rf %{buildroot}
 pushd clr-build
 %make_install

@@ -4,7 +4,7 @@
 #
 Name     : exiv2
 Version  : 0.25
-Release  : 3
+Release  : 4
 URL      : http://www.exiv2.org/exiv2-0.25.tar.gz
 Source0  : http://www.exiv2.org/exiv2-0.25.tar.gz
 Summary  : Image metadata library and tools
@@ -12,8 +12,11 @@ Group    : Development/Tools
 License  : BSD-3-Clause GPL-2.0
 Requires: exiv2-bin
 Requires: exiv2-lib
+Requires: exiv2-locales
+Requires: exiv2-doc
 BuildRequires : cmake
 BuildRequires : expat-dev
+BuildRequires : pkgconfig(zlib)
 BuildRequires : zlib-dev
 
 %description
@@ -41,6 +44,14 @@ Provides: exiv2-devel
 dev components for the exiv2 package.
 
 
+%package doc
+Summary: doc components for the exiv2 package.
+Group: Documentation
+
+%description doc
+doc components for the exiv2 package.
+
+
 %package lib
 Summary: lib components for the exiv2 package.
 Group: Libraries
@@ -49,40 +60,38 @@ Group: Libraries
 lib components for the exiv2 package.
 
 
+%package locales
+Summary: locales components for the exiv2 package.
+Group: Default
+
+%description locales
+locales components for the exiv2 package.
+
+
 %prep
 %setup -q -n exiv2-0.25
 
 %build
 export LANG=C
-export SOURCE_DATE_EPOCH=1484507381
-mkdir clr-build
-pushd clr-build
-cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=%{_libdir} -DCMAKE_AR=/usr/bin/gcc-ar -DLIB_SUFFIX=64 -DCMAKE_RANLIB=/usr/bin/gcc-ranlib
-make VERBOSE=1  %{?_smp_mflags}
-popd
+export SOURCE_DATE_EPOCH=1487024810
+%configure --disable-static
+make V=1  %{?_smp_mflags}
 
 %install
-export SOURCE_DATE_EPOCH=1484507381
+export SOURCE_DATE_EPOCH=1487024810
 rm -rf %{buildroot}
-pushd clr-build
 %make_install
-popd
+%find_lang exiv2
 
 %files
 %defattr(-,root,root,-)
-/usr/lib64/pkgconfig/exiv2.lsm
-/usr/man/man1/exiv2.1
 
 %files bin
 %defattr(-,root,root,-)
 /usr/bin/exiv2
-/usr/bin/exiv2json
-/usr/bin/metacopy
-/usr/bin/path-test
 
 %files dev
 %defattr(-,root,root,-)
-/usr/include/exiv2/asfvideo.hpp
 /usr/include/exiv2/basicio.hpp
 /usr/include/exiv2/bmpimage.hpp
 /usr/include/exiv2/config.h
@@ -104,7 +113,6 @@ popd
 /usr/include/exiv2/iptc.hpp
 /usr/include/exiv2/jp2image.hpp
 /usr/include/exiv2/jpgimage.hpp
-/usr/include/exiv2/matroskavideo.hpp
 /usr/include/exiv2/metadatum.hpp
 /usr/include/exiv2/mrwimage.hpp
 /usr/include/exiv2/orfimage.hpp
@@ -113,24 +121,29 @@ popd
 /usr/include/exiv2/preview.hpp
 /usr/include/exiv2/properties.hpp
 /usr/include/exiv2/psdimage.hpp
-/usr/include/exiv2/quicktimevideo.hpp
 /usr/include/exiv2/rafimage.hpp
-/usr/include/exiv2/riffvideo.hpp
 /usr/include/exiv2/rw2image.hpp
 /usr/include/exiv2/svn_version.h
 /usr/include/exiv2/tags.hpp
 /usr/include/exiv2/tgaimage.hpp
 /usr/include/exiv2/tiffimage.hpp
 /usr/include/exiv2/types.hpp
-/usr/include/exiv2/utilsvideo.hpp
 /usr/include/exiv2/value.hpp
 /usr/include/exiv2/version.hpp
 /usr/include/exiv2/xmp.hpp
 /usr/include/exiv2/xmpsidecar.hpp
-/usr/lib/libexiv2.so
+/usr/lib64/libexiv2.so
 /usr/lib64/pkgconfig/exiv2.pc
+
+%files doc
+%defattr(-,root,root,-)
+%doc /usr/share/man/man1/*
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib/libexiv2.so.14
-/usr/lib/libexiv2.so.14.0.0
+/usr/lib64/libexiv2.so.14
+/usr/lib64/libexiv2.so.14.0.0
+
+%files locales -f exiv2.lang
+%defattr(-,root,root,-)
+

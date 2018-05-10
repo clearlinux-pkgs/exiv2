@@ -4,7 +4,7 @@
 #
 Name     : exiv2
 Version  : 0.25
-Release  : 6
+Release  : 7
 URL      : http://www.exiv2.org/exiv2-0.25.tar.gz
 Source0  : http://www.exiv2.org/exiv2-0.25.tar.gz
 Summary  : Image metadata library and tools

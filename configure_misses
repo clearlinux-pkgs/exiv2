@@ -1,0 +1,5 @@
+Configure miss: whether strerror_r returns char *
+Configure miss: whether the C++ compiler accepts the -xldscope=hidden flag
+Configure miss: whether to compile a commercial version of the Exiv2 library
+Configure miss: whether to compile with video support
+Configure miss: whether to compile with webready support

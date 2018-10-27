@@ -4,22 +4,37 @@
 #
 Name     : exiv2
 Version  : 0.26.trunk
-Release  : 8
+Release  : 9
 URL      : http://www.exiv2.org/builds/exiv2-0.26-trunk.tar.gz
 Source0  : http://www.exiv2.org/builds/exiv2-0.26-trunk.tar.gz
 Summary  : Image metadata library and tools
 Group    : Development/Tools
 License  : BSD-3-Clause GPL-2.0
-Requires: exiv2-bin
-Requires: exiv2-lib
-Requires: exiv2-license
-Requires: exiv2-locales
-Requires: exiv2-man
+Requires: exiv2-bin = %{version}-%{release}
+Requires: exiv2-lib = %{version}-%{release}
+Requires: exiv2-license = %{version}-%{release}
+Requires: exiv2-locales = %{version}-%{release}
+Requires: exiv2-man = %{version}-%{release}
 BuildRequires : buildreq-cmake
+BuildRequires : buildreq-configure
 BuildRequires : buildreq-qmake
 BuildRequires : expat-dev
 BuildRequires : pkgconfig(zlib)
 BuildRequires : zlib-dev
+Patch1: CVE-2017-11683.patch
+Patch2: CVE-2017-14860.patch
+Patch3: CVE-2017-14864.patch
+Patch4: CVE-2017-17669.patch
+Patch5: CVE-2017-17723.patch
+Patch6: CVE-2017-17725.patch
+Patch7: CVE-2018-5772.patch
+Patch8: CVE-2018-8976.patch
+Patch9: CVE-2018-8977.patch
+Patch10: CVE-2018-10958.patch
+Patch11: CVE-2018-10998.patch
+Patch12: CVE-2018-11531.patch
+Patch13: CVE-2018-12264.patch
+Patch14: CVE-2018-14046.patch
 
 %description
 @@@Marco@@@@@b                   ;mm                       /##Gilles###\
@@ -38,8 +53,8 @@ j@@@#Robin",                     Brad                     /@@@Thomas@@@@Q
 %package bin
 Summary: bin components for the exiv2 package.
 Group: Binaries
-Requires: exiv2-license
-Requires: exiv2-man
+Requires: exiv2-license = %{version}-%{release}
+Requires: exiv2-man = %{version}-%{release}
 
 %description bin
 bin components for the exiv2 package.
@@ -48,9 +63,9 @@ bin components for the exiv2 package.
 %package dev
 Summary: dev components for the exiv2 package.
 Group: Development
-Requires: exiv2-lib
-Requires: exiv2-bin
-Provides: exiv2-devel
+Requires: exiv2-lib = %{version}-%{release}
+Requires: exiv2-bin = %{version}-%{release}
+Provides: exiv2-devel = %{version}-%{release}
 
 %description dev
 dev components for the exiv2 package.
@@ -59,7 +74,7 @@ dev components for the exiv2 package.
 %package lib
 Summary: lib components for the exiv2 package.
 Group: Libraries
-Requires: exiv2-license
+Requires: exiv2-license = %{version}-%{release}
 
 %description lib
 lib components for the exiv2 package.
@@ -91,23 +106,41 @@ man components for the exiv2 package.
 
 %prep
 %setup -q -n exiv2-trunk
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
+%patch6 -p1
+%patch7 -p1
+%patch8 -p1
+%patch9 -p1
+%patch10 -p1
+%patch11 -p1
+%patch12 -p1
+%patch13 -p1
+%patch14 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1532201275
+export SOURCE_DATE_EPOCH=1540599836
+export CFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FCFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
+export CXXFLAGS="$CXXFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
 %configure --disable-static
 make  %{?_smp_mflags}
 
 %install
-export SOURCE_DATE_EPOCH=1532201275
+export SOURCE_DATE_EPOCH=1540599836
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/doc/exiv2
-cp COPYING-CMAKE-SCRIPTS %{buildroot}/usr/share/doc/exiv2/COPYING-CMAKE-SCRIPTS
-cp COPYING %{buildroot}/usr/share/doc/exiv2/COPYING
-cp doc/COPYING-XMPSDK %{buildroot}/usr/share/doc/exiv2/doc_COPYING-XMPSDK
+mkdir -p %{buildroot}/usr/share/package-licenses/exiv2
+cp COPYING %{buildroot}/usr/share/package-licenses/exiv2/COPYING
+cp COPYING-CMAKE-SCRIPTS %{buildroot}/usr/share/package-licenses/exiv2/COPYING-CMAKE-SCRIPTS
+cp doc/COPYING-XMPSDK %{buildroot}/usr/share/package-licenses/exiv2/doc_COPYING-XMPSDK
 %make_install
 %find_lang exiv2
 
@@ -172,13 +205,13 @@ cp doc/COPYING-XMPSDK %{buildroot}/usr/share/doc/exiv2/doc_COPYING-XMPSDK
 /usr/lib64/libexiv2.so.26.0.0
 
 %files license
-%defattr(-,root,root,-)
-/usr/share/doc/exiv2/COPYING
-/usr/share/doc/exiv2/COPYING-CMAKE-SCRIPTS
-/usr/share/doc/exiv2/doc_COPYING-XMPSDK
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/exiv2/COPYING
+/usr/share/package-licenses/exiv2/COPYING-CMAKE-SCRIPTS
+/usr/share/package-licenses/exiv2/doc_COPYING-XMPSDK
 
 %files man
-%defattr(-,root,root,-)
+%defattr(0644,root,root,0755)
 /usr/share/man/man1/exiv2.1
 /usr/share/man/man1/exiv2samples.1
 

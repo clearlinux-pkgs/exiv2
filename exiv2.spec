@@ -4,7 +4,7 @@
 #
 Name     : exiv2
 Version  : 0.26.trunk
-Release  : 9
+Release  : 10
 URL      : http://www.exiv2.org/builds/exiv2-0.26-trunk.tar.gz
 Source0  : http://www.exiv2.org/builds/exiv2-0.26-trunk.tar.gz
 Summary  : Image metadata library and tools
@@ -126,7 +126,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1540599836
+export SOURCE_DATE_EPOCH=1540842561
 export CFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -135,7 +135,7 @@ export CXXFLAGS="$CXXFLAGS -fstack-protector-strong -mzero-caller-saved-regs=use
 make  %{?_smp_mflags}
 
 %install
-export SOURCE_DATE_EPOCH=1540599836
+export SOURCE_DATE_EPOCH=1540842561
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/exiv2
 cp COPYING %{buildroot}/usr/share/package-licenses/exiv2/COPYING

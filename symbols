@@ -40,6 +40,7 @@ libexiv2.so.27:_ZN5Exiv211StringValueD2Ev
 libexiv2.so.27:_ZN5Exiv211focalLengthERKNS_8ExifDataE
 libexiv2.so.27:_ZN5Exiv211getRationalEPKhNS_9ByteOrderE
 libexiv2.so.27:_ZN5Exiv211orientationERKNS_8ExifDataE
+libexiv2.so.27:_ZN5Exiv211testVersionEiii
 libexiv2.so.27:_ZN5Exiv212CommentValue11CharsetInfo15charsetIdByCodeERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE
 libexiv2.so.27:_ZN5Exiv212CommentValue11CharsetInfo15charsetIdByNameERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE
 libexiv2.so.27:_ZN5Exiv212CommentValue11CharsetInfo4codeENS0_9CharsetIdE
@@ -411,6 +412,7 @@ libexiv2.so.27:_ZN5Exiv27hexdumpERSoPKhll
 libexiv2.so.27:_ZN5Exiv27ul2DataEPhjNS_9ByteOrderE
 libexiv2.so.27:_ZN5Exiv27ur2DataEPhSt4pairIjjENS_9ByteOrderE
 libexiv2.so.27:_ZN5Exiv27us2DataEPhtNS_9ByteOrderE
+libexiv2.so.27:_ZN5Exiv27versionEv
 libexiv2.so.27:_ZN5Exiv28AnyErrorC1ERKS0_
 libexiv2.so.27:_ZN5Exiv28AnyErrorC1Ev
 libexiv2.so.27:_ZN5Exiv28AnyErrorC2ERKS0_

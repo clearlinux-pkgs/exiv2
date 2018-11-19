@@ -1,0 +1,162 @@
+From 89375979d8c5b0ce667851cd2d7afb40fc844abf Mon Sep 17 00:00:00 2001
+From: Robin Mills <robin@clanmills.com>
+Date: Mon, 19 Nov 2018 11:38:26 +0000
+Subject: [PATCH] https://github.com/Exiv2/exiv2/issues/555 I have restored the
+ Macro EXIV2_TEST_VERSION in include/exiv2/version.hpp I have added an option
+ --version-test to exifprint.cpp to test/validate EXIV2_TEST_VERSION works as
+ documented. Version strings in Exiv2 v0.27 and later have a fourth digit to
+ indicate the pre-release number of the build. Pre-release builds should never
+ be used for production purposes.
+
+---
+ include/exiv2/version.hpp | 59 +++++++++++++++++++++++++++++++++++++++
+ samples/exifprint.cpp     | 32 ++++++++++++++++++---
+ src/version.cpp           | 11 ++++++++
+ 3 files changed, 98 insertions(+), 4 deletions(-)
+
+diff --git a/include/exiv2/version.hpp b/include/exiv2/version.hpp
+index 5475fa937..93b154000 100644
+--- a/include/exiv2/version.hpp
++++ b/include/exiv2/version.hpp
+@@ -80,6 +80,52 @@
+ #define EXIV2_VERSION \
+     EXIV2_MAKE_VERSION(EXIV2_MAJOR_VERSION,EXIV2_MINOR_VERSION,EXIV2_PATCH_VERSION)
+ 
++/*!
++  @brief Macro to test the version the %Exiv2 library at compile-time.
++         Return true if it is the same as or newer than the passed-in version.
++
++  Versions prior to v0.27 are denoted using a triplet of integers: \em MAJOR.MINOR.PATCH .
++  From v0.27 forward, the fourth digit is a "tweak" and designates the pre-release number of the version.
++
++  @code
++  // Application code is expected to include <exiv2/exiv2.hpp>
++  // Don't include the <exiv2/version.hpp> file directly
++  // Early Exiv2 versions didn't have version.hpp and the macros.
++
++  #include <exiv2/exiv2.hpp>
++
++  // Make sure an EXIV2_TEST_VERSION macro exists:
++  #ifdef EXIV2_VERSION
++  # ifndef EXIV2_TEST_VERSION
++  # define EXIV2_TEST_VERSION(major,minor,patch) \
++      ( EXIV2_VERSION >= EXIV2_MAKE_VERSION(major,minor,patch) )
++  # endif
++  #else
++  # define EXIV2_TEST_VERSION(major,minor,patch) (false)
++  #endif
++
++  std::cout << "Compiled with Exiv2 version " << EXV_PACKAGE_VERSION << "\n"
++            << "Runtime Exiv2 version is    " << Exiv2::version()    << "\n";
++
++  // Test the Exiv2 version available at runtime but compile the if-clause only if
++  // the compile-time version is at least 0.15. Earlier versions didn't have a
++  // testVersion() function:
++
++  #if EXIV2_TEST_VERSION(0,15,0)
++  if (Exiv2::testVersion(0,13,0)) {
++      std::cout << "Available Exiv2 version is equal to or greater than 0.13\n";
++  }
++  else {
++      std::cout << "Installed Exiv2 version is less than 0.13\n";
++  }
++  #else
++  std::cout << "Compile-time Exiv2 version doesn't have Exiv2::testVersion()\n";
++  #endif
++  @endcode
++ */
++#define EXIV2_TEST_VERSION(major,minor,patch) \
++    ( EXIV2_VERSION >= EXIV2_MAKE_VERSION(major,minor,patch) )
++
+ // *****************************************************************************
+ // namespace extensions
+ namespace Exiv2 {
+@@ -96,6 +142,19 @@ namespace Exiv2 {
+     */
+     EXIV2API std::string versionNumberHexString();
+ 
++    /*!
++      @brief Return the version of %Exiv2 as "C" string eg "0.27.0.2".
++    */
++    EXIV2API const char* version();
++
++    /*!
++      @brief Test the version of the available %Exiv2 library at runtime. Return
++             true if it is the same as or newer than the passed-in version.
++
++      Versions are denoted using a triplet of integers: \em major.minor.patch .
++      The fourth version number is designated a "tweak" an used by Release Candidates
++    */
++    EXIV2API bool testVersion(int major, int minor, int patch);
+     /*!
+       @brief dumpLibraryInfo implements the exiv2 option --version --verbose
+              used by exiv2 test suite to inspect libraries loaded at run-time
+diff --git a/samples/exifprint.cpp b/samples/exifprint.cpp
+index c74e6b1cb..5f4d5da1c 100644
+--- a/samples/exifprint.cpp
++++ b/samples/exifprint.cpp
+@@ -33,14 +33,38 @@ try {
+     const _tchar* file = argv[1];
+ 
+     if (argc != 2) {
+-        std::_tcout << _t("Usage: ") << prog << _t(" [ file | --version ]") << std::endl;
++        std::_tcout << _t("Usage: ") << prog << _t(" [ file | --version || --version-test ]") << std::endl;
+         return 1;
+     }
+ 
+     if ( _tstrcmp(file,_t("--version")) == 0 ) {
+-    	exv_grep_keys_t keys;
+-    	Exiv2::dumpLibraryInfo(std::cout,keys);
+-    	return 0;
++        exv_grep_keys_t keys;
++        Exiv2::dumpLibraryInfo(std::cout,keys);
++        return 0;
++    } else if ( _tstrcmp(file,_t("--version-test")) == 0 ) {
++        // verifies/test macro EXIV2_TEST_VERSION
++        // described in include/exiv2/version.hpp
++        std::cout << "EXV_PACKAGE_VERSION             " << EXV_PACKAGE_VERSION             << std::endl
++                  << "Exiv2::version()                " << Exiv2::version()                << std::endl
++                  << "strlen(Exiv2::version())        " << ::strlen(Exiv2::version())      << std::endl
++                  << "Exiv2::versionNumber()          " << Exiv2::versionNumber()          << std::endl
++                  << "Exiv2::versionString()          " << Exiv2::versionString()          << std::endl
++                  << "Exiv2::versionNumberHexString() " << Exiv2::versionNumberHexString() << std::endl
++                  ;
++
++        // Test the Exiv2 version available at runtime but compile the if-clause only if
++        // the compile-time version is at least 0.15. Earlier versions didn't have a
++        // testVersion() function:
++        #if EXIV2_TEST_VERSION(0,15,0)
++            if (Exiv2::testVersion(0,13,0)) {
++              std::cout << "Available Exiv2 version is equal to or greater than 0.13\n";
++            } else {
++              std::cout << "Installed Exiv2 version is less than 0.13\n";
++            }
++        #else
++              std::cout << "Compile-time Exiv2 version doesn't have Exiv2::testVersion()\n";
++        #endif
++        return 0;
+     }
+ 
+     Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open(file);
+diff --git a/src/version.cpp b/src/version.cpp
+index f8eb282f8..06bf5e450 100644
+--- a/src/version.cpp
++++ b/src/version.cpp
+@@ -82,6 +82,17 @@ namespace Exiv2 {
+         os << std::hex << std::setw(6) << std::setfill('0') << Exiv2::versionNumber();
+         return os.str();
+     }
++
++    const char* version()
++    {
++        return EXV_PACKAGE_VERSION;
++    }
++
++    bool testVersion(int major, int minor, int patch)
++    {
++        return versionNumber() >= EXIV2_MAKE_VERSION(major,minor,patch);
++    }
++
+ }                                       // namespace Exiv2
+ 
+ #ifndef lengthof

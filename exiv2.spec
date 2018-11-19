@@ -4,7 +4,7 @@
 #
 Name     : exiv2
 Version  : 0.27.rc2
-Release  : 11
+Release  : 12
 URL      : https://github.com/Exiv2/exiv2/archive/0.27-RC2.tar.gz
 Source0  : https://github.com/Exiv2/exiv2/archive/0.27-RC2.tar.gz
 Summary  : @PROJECT_DESCRIPTION@
@@ -22,7 +22,9 @@ BuildRequires : expat-dev
 BuildRequires : gettext-dev
 BuildRequires : glibc-dev
 BuildRequires : googletest-dev
+BuildRequires : pkgconfig(zlib)
 BuildRequires : zlib-dev
+Patch1: restor-test-version.patch
 
 %description
 organize uses the Boost library (http://www.boost.org).
@@ -88,13 +90,14 @@ man components for the exiv2 package.
 
 %prep
 %setup -q -n exiv2-0.27-RC2
+%patch1 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1542600749
+export SOURCE_DATE_EPOCH=1542644265
 mkdir -p clr-build
 pushd clr-build
 export CFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -106,7 +109,7 @@ make  %{?_smp_mflags} VERBOSE=1
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1542600749
+export SOURCE_DATE_EPOCH=1542644265
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/exiv2
 cp COPYING %{buildroot}/usr/share/package-licenses/exiv2/COPYING

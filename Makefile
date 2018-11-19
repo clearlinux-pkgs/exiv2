@@ -1,5 +1,5 @@
 PKG_NAME := exiv2
-URL = http://www.exiv2.org/builds/exiv2-0.26-trunk.tar.gz
+URL = https://github.com/Exiv2/exiv2/archive/0.27-RC2.tar.gz
 ARCHIVES = 
 
 include ../common/Makefile.common

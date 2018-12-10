@@ -396,6 +396,7 @@ libexiv2.so.27:_ZN5Exiv27XPathIoC2ERKNSt7__cxx1112basic_stringIcSt11char_traitsI
 libexiv2.so.27:_ZN5Exiv27XPathIoD0Ev
 libexiv2.so.27:_ZN5Exiv27XPathIoD1Ev
 libexiv2.so.27:_ZN5Exiv27XPathIoD2Ev
+libexiv2.so.27:_ZN5Exiv27XmpData11eraseFamilyERN9__gnu_cxx17__normal_iteratorIPNS_8XmpdatumESt6vectorIS3_SaIS3_EEEE
 libexiv2.so.27:_ZN5Exiv27XmpData3addERKNS_6XmpKeyEPKNS_5ValueE
 libexiv2.so.27:_ZN5Exiv27XmpData3addERKNS_8XmpdatumE
 libexiv2.so.27:_ZN5Exiv27XmpData3endEv

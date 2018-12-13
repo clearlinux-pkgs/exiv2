@@ -4,7 +4,7 @@
 #
 Name     : exiv2
 Version  : 0.27.rc3
-Release  : 13
+Release  : 14
 URL      : https://github.com/Exiv2/exiv2/archive/0.27-RC3.tar.gz
 Source0  : https://github.com/Exiv2/exiv2/archive/0.27-RC3.tar.gz
 Summary  : @PROJECT_DESCRIPTION@

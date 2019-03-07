@@ -4,7 +4,7 @@
 #
 Name     : exiv2
 Version  : 0.27
-Release  : 15
+Release  : 16
 URL      : https://github.com/Exiv2/exiv2/archive/0.27.tar.gz
 Source0  : https://github.com/Exiv2/exiv2/archive/0.27.tar.gz
 Summary  : @PROJECT_DESCRIPTION@

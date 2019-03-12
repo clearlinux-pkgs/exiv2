@@ -4,7 +4,7 @@
 #
 Name     : exiv2
 Version  : 0.27
-Release  : 16
+Release  : 17
 URL      : https://github.com/Exiv2/exiv2/archive/0.27.tar.gz
 Source0  : https://github.com/Exiv2/exiv2/archive/0.27.tar.gz
 Summary  : @PROJECT_DESCRIPTION@
@@ -22,7 +22,9 @@ BuildRequires : expat-dev
 BuildRequires : gettext-dev
 BuildRequires : glibc-dev
 BuildRequires : googletest-dev
+BuildRequires : pkgconfig(zlib)
 BuildRequires : zlib-dev
+Patch1: CVE-2018-20096.patch
 
 %description
 organize uses the Boost library (http://www.boost.org).
@@ -34,7 +36,6 @@ Summary: bin components for the exiv2 package.
 Group: Binaries
 Requires: exiv2-data = %{version}-%{release}
 Requires: exiv2-license = %{version}-%{release}
-Requires: exiv2-man = %{version}-%{release}
 
 %description bin
 bin components for the exiv2 package.
@@ -88,25 +89,27 @@ man components for the exiv2 package.
 
 %prep
 %setup -q -n exiv2-0.27
+%patch1 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1545425477
+export SOURCE_DATE_EPOCH=1552356320
 mkdir -p clr-build
 pushd clr-build
+export LDFLAGS="${LDFLAGS} -fno-lto"
 export CFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FFLAGS="$CFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
 export CXXFLAGS="$CXXFLAGS -fstack-protector-strong -mzero-caller-saved-regs=used "
 %cmake ..
-make  %{?_smp_mflags}
+make  %{?_smp_mflags} VERBOSE=1
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1545425477
+export SOURCE_DATE_EPOCH=1552356320
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/exiv2
 cp COPYING %{buildroot}/usr/share/package-licenses/exiv2/COPYING

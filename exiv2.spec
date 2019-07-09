@@ -4,10 +4,10 @@
 #
 Name     : exiv2
 Version  : 0.27.1
-Release  : 19
+Release  : 20
 URL      : https://github.com/Exiv2/exiv2/archive/0.27.1/exiv2-0.27.1.tar.gz
 Source0  : https://github.com/Exiv2/exiv2/archive/0.27.1/exiv2-0.27.1.tar.gz
-Summary  : Exif, Iptc and XMP metadata manipulation library and tools
+Summary  : @PROJECT_DESCRIPTION@
 Group    : Development/Tools
 License  : BSD-3-Clause GPL-2.0
 Requires: exiv2-bin = %{version}-%{release}
@@ -23,11 +23,17 @@ BuildRequires : glibc-dev
 BuildRequires : googletest-dev
 BuildRequires : pkgconfig(zlib)
 BuildRequires : zlib-dev
+Patch1: CVE-2019-13108.patch
+Patch2: CVE-2019-13109.patch
+Patch3: CVE-2019-13110.patch
+Patch4: CVE-2019-13111.patch
+Patch5: CVE-2019-13112.patch
+Patch6: CVE-2019-13113.patch
 
 %description
-| Travis        | AppVeyor      | GitLab| Codecov|
-|:-------------:|:-------------:|:-----:|:------:|
-| [![Build Status](https://travis-ci.org/Exiv2/exiv2.svg?branch=master)](https://travis-ci.org/Exiv2/exiv2) | [![Build status](https://ci.appveyor.com/api/projects/status/d6vxf2n0cp3v88al/branch/master?svg=true)](https://ci.appveyor.com/project/piponazo/exiv2-wutfp/branch/master) | [![pipeline status](https://gitlab.com/D4N/exiv2/badges/master/pipeline.svg)](https://gitlab.com/D4N/exiv2/commits/master) | [![codecov](https://codecov.io/gh/Exiv2/exiv2/branch/master/graph/badge.svg)](https://codecov.io/gh/Exiv2/exiv2) |
+organize uses the Boost library (http://www.boost.org).
+Configuration settings for Boost are in the file boost.mk
+in this directory and should be changed as required.
 
 %package bin
 Summary: bin components for the exiv2 package.
@@ -77,25 +83,32 @@ man components for the exiv2 package.
 
 %prep
 %setup -q -n exiv2-0.27.1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
+%patch6 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1556547152
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1562791479
 mkdir -p clr-build
 pushd clr-build
-export CFLAGS="$CFLAGS -fcf-protection=full -fstack-protector-strong "
-export FCFLAGS="$CFLAGS -fcf-protection=full -fstack-protector-strong "
-export FFLAGS="$CFLAGS -fcf-protection=full -fstack-protector-strong "
-export CXXFLAGS="$CXXFLAGS -fcf-protection=full -fstack-protector-strong "
+export GCC_IGNORE_WERROR=1
+export CFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FCFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FFLAGS="$CFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
+export CXXFLAGS="$CXXFLAGS -fno-lto -fstack-protector-strong -mzero-caller-saved-regs=used "
 %cmake ..
-make  %{?_smp_mflags}
+make  %{?_smp_mflags} VERBOSE=1
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1556547152
+export SOURCE_DATE_EPOCH=1562791479
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/exiv2
 cp COPYING %{buildroot}/usr/share/package-licenses/exiv2/COPYING

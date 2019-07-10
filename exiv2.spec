@@ -4,7 +4,7 @@
 #
 Name     : exiv2
 Version  : 0.27.1
-Release  : 20
+Release  : 21
 URL      : https://github.com/Exiv2/exiv2/archive/0.27.1/exiv2-0.27.1.tar.gz
 Source0  : https://github.com/Exiv2/exiv2/archive/0.27.1/exiv2-0.27.1.tar.gz
 Summary  : @PROJECT_DESCRIPTION@
@@ -29,6 +29,7 @@ Patch3: CVE-2019-13110.patch
 Patch4: CVE-2019-13111.patch
 Patch5: CVE-2019-13112.patch
 Patch6: CVE-2019-13113.patch
+Patch7: CVE-2019-13114.patch
 
 %description
 organize uses the Boost library (http://www.boost.org).
@@ -89,13 +90,14 @@ man components for the exiv2 package.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1562791479
+export SOURCE_DATE_EPOCH=1562792090
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -108,7 +110,7 @@ make  %{?_smp_mflags} VERBOSE=1
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1562791479
+export SOURCE_DATE_EPOCH=1562792090
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/exiv2
 cp COPYING %{buildroot}/usr/share/package-licenses/exiv2/COPYING

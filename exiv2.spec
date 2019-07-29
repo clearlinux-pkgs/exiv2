@@ -4,7 +4,7 @@
 #
 Name     : exiv2
 Version  : 0.27.2
-Release  : 23
+Release  : 24
 URL      : https://github.com/Exiv2/exiv2/archive/v0.27.2/exiv2-0.27.2.tar.gz
 Source0  : https://github.com/Exiv2/exiv2/archive/v0.27.2/exiv2-0.27.2.tar.gz
 Summary  : Exif, Iptc and XMP metadata manipulation library and tools
@@ -21,6 +21,7 @@ BuildRequires : expat-dev
 BuildRequires : gettext-dev
 BuildRequires : glibc-dev
 BuildRequires : googletest-dev
+BuildRequires : pkgconfig(zlib)
 BuildRequires : zlib-dev
 
 %description
@@ -82,7 +83,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1564412525
+export SOURCE_DATE_EPOCH=1564413850
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -98,7 +99,7 @@ make  %{?_smp_mflags} VERBOSE=1
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1564412525
+export SOURCE_DATE_EPOCH=1564413850
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/exiv2
 cp COPYING %{buildroot}/usr/share/package-licenses/exiv2/COPYING

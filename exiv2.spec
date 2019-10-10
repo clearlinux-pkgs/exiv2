@@ -4,7 +4,7 @@
 #
 Name     : exiv2
 Version  : 0.27.2
-Release  : 24
+Release  : 25
 URL      : https://github.com/Exiv2/exiv2/archive/v0.27.2/exiv2-0.27.2.tar.gz
 Source0  : https://github.com/Exiv2/exiv2/archive/v0.27.2/exiv2-0.27.2.tar.gz
 Summary  : Exif, Iptc and XMP metadata manipulation library and tools
@@ -23,9 +23,9 @@ BuildRequires : glibc-dev
 BuildRequires : googletest-dev
 BuildRequires : pkgconfig(zlib)
 BuildRequires : zlib-dev
+Patch1: CVE-2019-17402.patch
 
 %description
-# Exiv2 Sample Applications
 Exiv2 is a C++ library and a command line utility to read, write, delete and modify Exif, IPTC, XMP and ICC image metadata.  Exiv2 also features a collection of sample and test command-line programs.  Please be aware that while the program _**exiv2**_ enjoys full support from Team Exiv2, the other programs have been written for test, documentation or development purposes.  You are expected to read the code to discover the specification of programs other than _**exiv2**_.
 
 %package bin
@@ -43,7 +43,6 @@ Group: Development
 Requires: exiv2-lib = %{version}-%{release}
 Requires: exiv2-bin = %{version}-%{release}
 Provides: exiv2-devel = %{version}-%{release}
-Requires: exiv2 = %{version}-%{release}
 Requires: exiv2 = %{version}-%{release}
 
 %description dev
@@ -77,29 +76,30 @@ man components for the exiv2 package.
 
 %prep
 %setup -q -n exiv2-0.27.2
+%patch1 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1564413850
+export SOURCE_DATE_EPOCH=1570736312
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
-export CFLAGS="$CFLAGS -O3 -fcf-protection=full -ffat-lto-objects -flto=4 -fstack-protector-strong "
-export FCFLAGS="$CFLAGS -O3 -fcf-protection=full -ffat-lto-objects -flto=4 -fstack-protector-strong "
-export FFLAGS="$CFLAGS -O3 -fcf-protection=full -ffat-lto-objects -flto=4 -fstack-protector-strong "
-export CXXFLAGS="$CXXFLAGS -O3 -fcf-protection=full -ffat-lto-objects -flto=4 -fstack-protector-strong "
+export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FCFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -mzero-caller-saved-regs=used "
+export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -mzero-caller-saved-regs=used "
 %cmake ..
-make  %{?_smp_mflags} VERBOSE=1
+make  %{?_smp_mflags}  VERBOSE=1
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1564413850
+export SOURCE_DATE_EPOCH=1570736312
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/exiv2
 cp COPYING %{buildroot}/usr/share/package-licenses/exiv2/COPYING

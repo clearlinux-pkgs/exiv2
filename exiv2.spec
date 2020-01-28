@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : exiv2
 Version  : 0.27.2
-Release  : 26
+Release  : 27
 URL      : https://github.com/Exiv2/exiv2/archive/v0.27.2/exiv2-0.27.2.tar.gz
 Source0  : https://github.com/Exiv2/exiv2/archive/v0.27.2/exiv2-0.27.2.tar.gz
 Summary  : Exif, Iptc and XMP metadata manipulation library and tools
@@ -25,6 +25,7 @@ BuildRequires : googletest-dev
 BuildRequires : pkgconfig(zlib)
 BuildRequires : zlib-dev
 Patch1: CVE-2019-17402.patch
+Patch2: CVE-2019-20421.patch
 
 %description
 Exiv2 is a C++ library and a command line utility to read, write, delete and modify Exif, IPTC, XMP and ICC image metadata.  Exiv2 also features a collection of sample and test command-line programs.  Please be aware that while the program _**exiv2**_ enjoys full support from Team Exiv2, the other programs have been written for test, documentation or development purposes.  You are expected to read the code to discover the specification of programs other than _**exiv2**_.
@@ -88,13 +89,14 @@ staticdev components for the exiv2 package.
 %setup -q -n exiv2-0.27.2
 cd %{_builddir}/exiv2-0.27.2
 %patch1 -p1
+%patch2 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1578619317
+export SOURCE_DATE_EPOCH=1580234621
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -110,7 +112,7 @@ make  %{?_smp_mflags}  VERBOSE=1
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1578619317
+export SOURCE_DATE_EPOCH=1580234621
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/exiv2
 cp %{_builddir}/exiv2-0.27.2/COPYING %{buildroot}/usr/share/package-licenses/exiv2/be0b40ce8f9532b75966a20d14af123d3c6b05aa

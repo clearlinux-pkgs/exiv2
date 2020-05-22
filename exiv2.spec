@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : exiv2
 Version  : 0.27.2
-Release  : 27
+Release  : 28
 URL      : https://github.com/Exiv2/exiv2/archive/v0.27.2/exiv2-0.27.2.tar.gz
 Source0  : https://github.com/Exiv2/exiv2/archive/v0.27.2/exiv2-0.27.2.tar.gz
 Summary  : Exif, Iptc and XMP metadata manipulation library and tools

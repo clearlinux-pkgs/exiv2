@@ -4,10 +4,10 @@
 #
 %define keepstatic 1
 Name     : exiv2
-Version  : 0.27.2
-Release  : 28
-URL      : https://github.com/Exiv2/exiv2/archive/v0.27.2/exiv2-0.27.2.tar.gz
-Source0  : https://github.com/Exiv2/exiv2/archive/v0.27.2/exiv2-0.27.2.tar.gz
+Version  : 0.27.3
+Release  : 29
+URL      : https://github.com/Exiv2/exiv2/archive/v0.27.3/exiv2-0.27.3.tar.gz
+Source0  : https://github.com/Exiv2/exiv2/archive/v0.27.3/exiv2-0.27.3.tar.gz
 Summary  : Exif, Iptc and XMP metadata manipulation library and tools
 Group    : Development/Tools
 License  : BSD-3-Clause GPL-2.0
@@ -16,16 +16,15 @@ Requires: exiv2-lib = %{version}-%{release}
 Requires: exiv2-license = %{version}-%{release}
 Requires: exiv2-man = %{version}-%{release}
 BuildRequires : buildreq-cmake
+BuildRequires : buildreq-qmake
 BuildRequires : curl-dev
 BuildRequires : doxygen
 BuildRequires : expat-dev
 BuildRequires : gettext-dev
 BuildRequires : glibc-dev
 BuildRequires : googletest-dev
-BuildRequires : pkgconfig(zlib)
+BuildRequires : libssh-dev
 BuildRequires : zlib-dev
-Patch1: CVE-2019-17402.patch
-Patch2: CVE-2019-20421.patch
 
 %description
 Exiv2 is a C++ library and a command line utility to read, write, delete and modify Exif, IPTC, XMP and ICC image metadata.  Exiv2 also features a collection of sample and test command-line programs.  Please be aware that while the program _**exiv2**_ enjoys full support from Team Exiv2, the other programs have been written for test, documentation or development purposes.  You are expected to read the code to discover the specification of programs other than _**exiv2**_.
@@ -86,17 +85,15 @@ staticdev components for the exiv2 package.
 
 
 %prep
-%setup -q -n exiv2-0.27.2
-cd %{_builddir}/exiv2-0.27.2
-%patch1 -p1
-%patch2 -p1
+%setup -q -n exiv2-0.27.3
+cd %{_builddir}/exiv2-0.27.3
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1580234621
+export SOURCE_DATE_EPOCH=1594220185
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -104,22 +101,20 @@ export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
 export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -mzero-caller-saved-regs=used "
-export FCFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -mzero-caller-saved-regs=used "
-export FFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -mzero-caller-saved-regs=used "
 export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -mzero-caller-saved-regs=used "
 %cmake ..
-make  %{?_smp_mflags}  VERBOSE=1
+make  %{?_smp_mflags}
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1580234621
+export SOURCE_DATE_EPOCH=1594220185
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/exiv2
-cp %{_builddir}/exiv2-0.27.2/COPYING %{buildroot}/usr/share/package-licenses/exiv2/be0b40ce8f9532b75966a20d14af123d3c6b05aa
-cp %{_builddir}/exiv2-0.27.2/COPYING-CMAKE-SCRIPTS %{buildroot}/usr/share/package-licenses/exiv2/ff3ed70db4739b3c6747c7f624fe2bad70802987
-cp %{_builddir}/exiv2-0.27.2/doc/COPYING-XMPSDK %{buildroot}/usr/share/package-licenses/exiv2/e70d36a2ced771e55c1c902dd740bf95013ce59c
-cp %{_builddir}/exiv2-0.27.2/license.txt %{buildroot}/usr/share/package-licenses/exiv2/4cc77b90af91e615a64ae04893fdffa7939db84c
-cp %{_builddir}/exiv2-0.27.2/test/data/COPYRIGHT %{buildroot}/usr/share/package-licenses/exiv2/e24a9903abce58262de5ec8c9a4b54247c89191a
+cp %{_builddir}/exiv2-0.27.3/COPYING %{buildroot}/usr/share/package-licenses/exiv2/be0b40ce8f9532b75966a20d14af123d3c6b05aa
+cp %{_builddir}/exiv2-0.27.3/doc/COPYING-XMPSDK %{buildroot}/usr/share/package-licenses/exiv2/e70d36a2ced771e55c1c902dd740bf95013ce59c
+cp %{_builddir}/exiv2-0.27.3/test/data/COPYRIGHT %{buildroot}/usr/share/package-licenses/exiv2/e24a9903abce58262de5ec8c9a4b54247c89191a
 pushd clr-build
 %make_install
 popd
@@ -130,37 +125,20 @@ popd
 %files bin
 %defattr(-,root,root,-)
 /usr/bin/addmoddel
-/usr/bin/convert-test
-/usr/bin/easyaccess-test
 /usr/bin/exifcomment
 /usr/bin/exifdata
-/usr/bin/exifdata-test
 /usr/bin/exifprint
 /usr/bin/exifvalue
 /usr/bin/exiv2
 /usr/bin/exiv2json
 /usr/bin/geotag
-/usr/bin/ini-test
-/usr/bin/iotest
 /usr/bin/iptceasy
 /usr/bin/iptcprint
-/usr/bin/iptctest
-/usr/bin/key-test
-/usr/bin/largeiptc-test
 /usr/bin/metacopy
-/usr/bin/mmap-test
 /usr/bin/mrwthumb
-/usr/bin/path-test
-/usr/bin/prevtest
-/usr/bin/stringto-test
 /usr/bin/taglist
-/usr/bin/tiff-test
-/usr/bin/werror-test
-/usr/bin/write-test
-/usr/bin/write2-test
 /usr/bin/xmpdump
 /usr/bin/xmpparse
-/usr/bin/xmpparser-test
 /usr/bin/xmpprint
 /usr/bin/xmpsample
 
@@ -224,16 +202,14 @@ popd
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/libexiv2.so.0.27.2
+/usr/lib64/libexiv2.so.0.27.3
 /usr/lib64/libexiv2.so.27
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/exiv2/4cc77b90af91e615a64ae04893fdffa7939db84c
 /usr/share/package-licenses/exiv2/be0b40ce8f9532b75966a20d14af123d3c6b05aa
 /usr/share/package-licenses/exiv2/e24a9903abce58262de5ec8c9a4b54247c89191a
 /usr/share/package-licenses/exiv2/e70d36a2ced771e55c1c902dd740bf95013ce59c
-/usr/share/package-licenses/exiv2/ff3ed70db4739b3c6747c7f624fe2bad70802987
 
 %files man
 %defattr(0644,root,root,0755)

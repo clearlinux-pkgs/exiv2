@@ -4,10 +4,10 @@
 #
 %define keepstatic 1
 Name     : exiv2
-Version  : 0.27.3
-Release  : 30
-URL      : https://github.com/Exiv2/exiv2/archive/v0.27.3/exiv2-0.27.3.tar.gz
-Source0  : https://github.com/Exiv2/exiv2/archive/v0.27.3/exiv2-0.27.3.tar.gz
+Version  : 0.27.4
+Release  : 31
+URL      : https://github.com/Exiv2/exiv2/archive/v0.27.4/exiv2-0.27.4.tar.gz
+Source0  : https://github.com/Exiv2/exiv2/archive/v0.27.4/exiv2-0.27.4.tar.gz
 Summary  : Exif, Iptc and XMP metadata manipulation library and tools
 Group    : Development/Tools
 License  : BSD-3-Clause GPL-2.0
@@ -85,15 +85,15 @@ staticdev components for the exiv2 package.
 
 
 %prep
-%setup -q -n exiv2-0.27.3
-cd %{_builddir}/exiv2-0.27.3
+%setup -q -n exiv2-0.27.4
+cd %{_builddir}/exiv2-0.27.4
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1594220185
+export SOURCE_DATE_EPOCH=1623778344
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -109,12 +109,12 @@ make  %{?_smp_mflags}
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1594220185
+export SOURCE_DATE_EPOCH=1623778344
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/exiv2
-cp %{_builddir}/exiv2-0.27.3/COPYING %{buildroot}/usr/share/package-licenses/exiv2/be0b40ce8f9532b75966a20d14af123d3c6b05aa
-cp %{_builddir}/exiv2-0.27.3/doc/COPYING-XMPSDK %{buildroot}/usr/share/package-licenses/exiv2/e70d36a2ced771e55c1c902dd740bf95013ce59c
-cp %{_builddir}/exiv2-0.27.3/test/data/COPYRIGHT %{buildroot}/usr/share/package-licenses/exiv2/e24a9903abce58262de5ec8c9a4b54247c89191a
+cp %{_builddir}/exiv2-0.27.4/COPYING %{buildroot}/usr/share/package-licenses/exiv2/be0b40ce8f9532b75966a20d14af123d3c6b05aa
+cp %{_builddir}/exiv2-0.27.4/doc/COPYING-XMPSDK %{buildroot}/usr/share/package-licenses/exiv2/e70d36a2ced771e55c1c902dd740bf95013ce59c
+cp %{_builddir}/exiv2-0.27.4/test/data/COPYRIGHT %{buildroot}/usr/share/package-licenses/exiv2/e24a9903abce58262de5ec8c9a4b54247c89191a
 pushd clr-build
 %make_install
 popd
@@ -146,7 +146,7 @@ popd
 %defattr(-,root,root,-)
 /usr/include/exiv2/asfvideo.hpp
 /usr/include/exiv2/basicio.hpp
-/usr/include/exiv2/bigtiffimage.hpp
+/usr/include/exiv2/bmffimage.hpp
 /usr/include/exiv2/bmpimage.hpp
 /usr/include/exiv2/config.h
 /usr/include/exiv2/convert.hpp
@@ -202,7 +202,7 @@ popd
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/libexiv2.so.0.27.3
+/usr/lib64/libexiv2.so.0.27.4
 /usr/lib64/libexiv2.so.27
 
 %files license

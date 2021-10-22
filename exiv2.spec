@@ -4,10 +4,10 @@
 #
 %define keepstatic 1
 Name     : exiv2
-Version  : 0.27.4
-Release  : 31
-URL      : https://github.com/Exiv2/exiv2/archive/v0.27.4/exiv2-0.27.4.tar.gz
-Source0  : https://github.com/Exiv2/exiv2/archive/v0.27.4/exiv2-0.27.4.tar.gz
+Version  : 0.27.5
+Release  : 32
+URL      : https://github.com/Exiv2/exiv2/archive/v0.27.5/exiv2-0.27.5.tar.gz
+Source0  : https://github.com/Exiv2/exiv2/archive/v0.27.5/exiv2-0.27.5.tar.gz
 Summary  : Exif, Iptc and XMP metadata manipulation library and tools
 Group    : Development/Tools
 License  : BSD-3-Clause GPL-2.0
@@ -85,36 +85,36 @@ staticdev components for the exiv2 package.
 
 
 %prep
-%setup -q -n exiv2-0.27.4
-cd %{_builddir}/exiv2-0.27.4
+%setup -q -n exiv2-0.27.5
+cd %{_builddir}/exiv2-0.27.5
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1623778344
+export SOURCE_DATE_EPOCH=1634923790
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
-export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -fzero-call-used-regs=used "
-export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -fzero-call-used-regs=used "
-export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -fzero-call-used-regs=used "
-export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 -fstack-protector-strong -fzero-call-used-regs=used "
+export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used "
+export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used "
+export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used "
+export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used "
 %cmake ..
 make  %{?_smp_mflags}
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1623778344
+export SOURCE_DATE_EPOCH=1634923790
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/exiv2
-cp %{_builddir}/exiv2-0.27.4/COPYING %{buildroot}/usr/share/package-licenses/exiv2/be0b40ce8f9532b75966a20d14af123d3c6b05aa
-cp %{_builddir}/exiv2-0.27.4/doc/COPYING-XMPSDK %{buildroot}/usr/share/package-licenses/exiv2/e70d36a2ced771e55c1c902dd740bf95013ce59c
-cp %{_builddir}/exiv2-0.27.4/test/data/COPYRIGHT %{buildroot}/usr/share/package-licenses/exiv2/e24a9903abce58262de5ec8c9a4b54247c89191a
+cp %{_builddir}/exiv2-0.27.5/COPYING %{buildroot}/usr/share/package-licenses/exiv2/be0b40ce8f9532b75966a20d14af123d3c6b05aa
+cp %{_builddir}/exiv2-0.27.5/doc/COPYING-XMPSDK %{buildroot}/usr/share/package-licenses/exiv2/e70d36a2ced771e55c1c902dd740bf95013ce59c
+cp %{_builddir}/exiv2-0.27.5/test/data/COPYRIGHT %{buildroot}/usr/share/package-licenses/exiv2/e24a9903abce58262de5ec8c9a4b54247c89191a
 pushd clr-build
 %make_install
 popd
@@ -202,7 +202,7 @@ popd
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/libexiv2.so.0.27.4
+/usr/lib64/libexiv2.so.0.27.5
 /usr/lib64/libexiv2.so.27
 
 %files license

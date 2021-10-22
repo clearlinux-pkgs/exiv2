@@ -5,13 +5,14 @@
 %define keepstatic 1
 Name     : exiv2
 Version  : 0.27.5
-Release  : 32
+Release  : 33
 URL      : https://github.com/Exiv2/exiv2/archive/v0.27.5/exiv2-0.27.5.tar.gz
 Source0  : https://github.com/Exiv2/exiv2/archive/v0.27.5/exiv2-0.27.5.tar.gz
 Summary  : Exif, Iptc and XMP metadata manipulation library and tools
 Group    : Development/Tools
 License  : BSD-3-Clause GPL-2.0
 Requires: exiv2-bin = %{version}-%{release}
+Requires: exiv2-filemap = %{version}-%{release}
 Requires: exiv2-lib = %{version}-%{release}
 Requires: exiv2-license = %{version}-%{release}
 Requires: exiv2-man = %{version}-%{release}
@@ -33,6 +34,7 @@ Exiv2 is a C++ library and a command line utility to read, write, delete and mod
 Summary: bin components for the exiv2 package.
 Group: Binaries
 Requires: exiv2-license = %{version}-%{release}
+Requires: exiv2-filemap = %{version}-%{release}
 
 %description bin
 bin components for the exiv2 package.
@@ -50,10 +52,19 @@ Requires: exiv2 = %{version}-%{release}
 dev components for the exiv2 package.
 
 
+%package filemap
+Summary: filemap components for the exiv2 package.
+Group: Default
+
+%description filemap
+filemap components for the exiv2 package.
+
+
 %package lib
 Summary: lib components for the exiv2 package.
 Group: Libraries
 Requires: exiv2-license = %{version}-%{release}
+Requires: exiv2-filemap = %{version}-%{release}
 
 %description lib
 lib components for the exiv2 package.
@@ -93,7 +104,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1634923790
+export SOURCE_DATE_EPOCH=1634924036
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -107,17 +118,38 @@ export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=auto -fstack-protector-st
 %cmake ..
 make  %{?_smp_mflags}
 popd
+mkdir -p clr-build-avx2
+pushd clr-build-avx2
+export GCC_IGNORE_WERROR=1
+export AR=gcc-ar
+export RANLIB=gcc-ranlib
+export NM=gcc-nm
+export CFLAGS="$CFLAGS -O3 -Wl,-z,x86-64-v3 -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used -march=x86-64-v3 -mtune=skylake "
+export FCFLAGS="$FFLAGS -O3 -Wl,-z,x86-64-v3 -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used -march=x86-64-v3 -mtune=skylake "
+export FFLAGS="$FFLAGS -O3 -Wl,-z,x86-64-v3 -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used -march=x86-64-v3 -mtune=skylake "
+export CXXFLAGS="$CXXFLAGS -O3 -Wl,-z,x86-64-v3 -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used -march=x86-64-v3 -mtune=skylake "
+export CFLAGS="$CFLAGS -march=x86-64-v3 -m64 -Wl,-z,x86-64-v3"
+export CXXFLAGS="$CXXFLAGS -march=x86-64-v3 -m64 -Wl,-z,x86-64-v3"
+export FFLAGS="$FFLAGS -march=x86-64-v3 -m64 -Wl,-z,x86-64-v3"
+export FCFLAGS="$FCFLAGS -march=x86-64-v3 -m64 -Wl,-z,x86-64-v3"
+%cmake ..
+make  %{?_smp_mflags}
+popd
 
 %install
-export SOURCE_DATE_EPOCH=1634923790
+export SOURCE_DATE_EPOCH=1634924036
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/exiv2
 cp %{_builddir}/exiv2-0.27.5/COPYING %{buildroot}/usr/share/package-licenses/exiv2/be0b40ce8f9532b75966a20d14af123d3c6b05aa
 cp %{_builddir}/exiv2-0.27.5/doc/COPYING-XMPSDK %{buildroot}/usr/share/package-licenses/exiv2/e70d36a2ced771e55c1c902dd740bf95013ce59c
 cp %{_builddir}/exiv2-0.27.5/test/data/COPYRIGHT %{buildroot}/usr/share/package-licenses/exiv2/e24a9903abce58262de5ec8c9a4b54247c89191a
+pushd clr-build-avx2
+%make_install_v3  || :
+popd
 pushd clr-build
 %make_install
 popd
+/usr/bin/elf-move.py avx2 %{buildroot}-v3 %{buildroot}/usr/share/clear/optimized-elf/ %{buildroot}/usr/share/clear/filemap/filemap-%{name}
 
 %files
 %defattr(-,root,root,-)
@@ -141,6 +173,7 @@ popd
 /usr/bin/xmpparse
 /usr/bin/xmpprint
 /usr/bin/xmpsample
+/usr/share/clear/optimized-elf/bin*
 
 %files dev
 %defattr(-,root,root,-)
@@ -200,10 +233,15 @@ popd
 /usr/lib64/libexiv2.so
 /usr/lib64/pkgconfig/exiv2.pc
 
+%files filemap
+%defattr(-,root,root,-)
+/usr/share/clear/filemap/filemap-exiv2
+
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/libexiv2.so.0.27.5
 /usr/lib64/libexiv2.so.27
+/usr/share/clear/optimized-elf/lib*
 
 %files license
 %defattr(0644,root,root,0755)

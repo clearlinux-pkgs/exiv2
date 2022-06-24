@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : exiv2
 Version  : 0.27.5
-Release  : 36
+Release  : 37
 URL      : https://github.com/Exiv2/exiv2/archive/v0.27.5/exiv2-0.27.5.tar.gz
 Source0  : https://github.com/Exiv2/exiv2/archive/v0.27.5/exiv2-0.27.5.tar.gz
 Summary  : Exif, Iptc and XMP metadata manipulation library and tools
@@ -104,7 +104,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1656022624
+export SOURCE_DATE_EPOCH=1656104852
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -137,7 +137,7 @@ make  %{?_smp_mflags}
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1656022624
+export SOURCE_DATE_EPOCH=1656104852
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/exiv2
 cp %{_builddir}/exiv2-0.27.5/COPYING %{buildroot}/usr/share/package-licenses/exiv2/be0b40ce8f9532b75966a20d14af123d3c6b05aa

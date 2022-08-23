@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : exiv2
 Version  : 0.27.5
-Release  : 40
+Release  : 41
 URL      : https://github.com/Exiv2/exiv2/archive/v0.27.5/exiv2-0.27.5.tar.gz
 Source0  : https://github.com/Exiv2/exiv2/archive/v0.27.5/exiv2-0.27.5.tar.gz
 Summary  : Exif, Iptc and XMP metadata manipulation library and tools
@@ -104,7 +104,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1656104852
+export SOURCE_DATE_EPOCH=1661263414
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -137,12 +137,12 @@ make  %{?_smp_mflags}
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1656104852
+export SOURCE_DATE_EPOCH=1661263414
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/exiv2
-cp %{_builddir}/exiv2-0.27.5/COPYING %{buildroot}/usr/share/package-licenses/exiv2/be0b40ce8f9532b75966a20d14af123d3c6b05aa
-cp %{_builddir}/exiv2-0.27.5/doc/COPYING-XMPSDK %{buildroot}/usr/share/package-licenses/exiv2/e70d36a2ced771e55c1c902dd740bf95013ce59c
-cp %{_builddir}/exiv2-0.27.5/test/data/COPYRIGHT %{buildroot}/usr/share/package-licenses/exiv2/e24a9903abce58262de5ec8c9a4b54247c89191a
+cp %{_builddir}/exiv2-%{version}/COPYING %{buildroot}/usr/share/package-licenses/exiv2/be0b40ce8f9532b75966a20d14af123d3c6b05aa
+cp %{_builddir}/exiv2-%{version}/doc/COPYING-XMPSDK %{buildroot}/usr/share/package-licenses/exiv2/e70d36a2ced771e55c1c902dd740bf95013ce59c
+cp %{_builddir}/exiv2-%{version}/test/data/COPYRIGHT %{buildroot}/usr/share/package-licenses/exiv2/e24a9903abce58262de5ec8c9a4b54247c89191a
 pushd clr-build-avx2
 %make_install_v3  || :
 popd
@@ -230,6 +230,7 @@ popd
 /usr/lib64/cmake/exiv2/exiv2Config-relwithdebinfo.cmake
 /usr/lib64/cmake/exiv2/exiv2Config.cmake
 /usr/lib64/cmake/exiv2/exiv2ConfigVersion.cmake
+/usr/lib64/glibc-hwcaps/x86-64-v3/libexiv2.so
 /usr/lib64/libexiv2.so
 /usr/lib64/pkgconfig/exiv2.pc
 
@@ -239,7 +240,6 @@ popd
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/glibc-hwcaps/x86-64-v3/libexiv2.so
 /usr/lib64/glibc-hwcaps/x86-64-v3/libexiv2.so.0.27.5
 /usr/lib64/glibc-hwcaps/x86-64-v3/libexiv2.so.27
 /usr/lib64/libexiv2.so.0.27.5
@@ -257,4 +257,5 @@ popd
 
 %files staticdev
 %defattr(-,root,root,-)
+/usr/lib64/glibc-hwcaps/x86-64-v3/libexiv2-xmp.a
 /usr/lib64/libexiv2-xmp.a

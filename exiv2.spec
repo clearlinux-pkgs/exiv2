@@ -4,10 +4,10 @@
 #
 %define keepstatic 1
 Name     : exiv2
-Version  : 0.27.5
-Release  : 44
-URL      : https://github.com/Exiv2/exiv2/archive/v0.27.5/exiv2-0.27.5.tar.gz
-Source0  : https://github.com/Exiv2/exiv2/archive/v0.27.5/exiv2-0.27.5.tar.gz
+Version  : 0.27.6
+Release  : 45
+URL      : https://github.com/Exiv2/exiv2/archive/v0.27.6/exiv2-0.27.6.tar.gz
+Source0  : https://github.com/Exiv2/exiv2/archive/v0.27.6/exiv2-0.27.6.tar.gz
 Summary  : Exif, Iptc and XMP metadata manipulation library and tools
 Group    : Development/Tools
 License  : BSD-3-Clause GPL-2.0
@@ -99,15 +99,15 @@ staticdev components for the exiv2 package.
 
 
 %prep
-%setup -q -n exiv2-0.27.5
-cd %{_builddir}/exiv2-0.27.5
+%setup -q -n exiv2-0.27.6
+cd %{_builddir}/exiv2-0.27.6
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1672867237
+export SOURCE_DATE_EPOCH=1674146187
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -140,7 +140,7 @@ make  %{?_smp_mflags}
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1672867237
+export SOURCE_DATE_EPOCH=1674146187
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/exiv2
 cp %{_builddir}/exiv2-%{version}/COPYING %{buildroot}/usr/share/package-licenses/exiv2/be0b40ce8f9532b75966a20d14af123d3c6b05aa || :
@@ -243,9 +243,9 @@ popd
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/glibc-hwcaps/x86-64-v3/libexiv2.so.0.27.5
+/usr/lib64/glibc-hwcaps/x86-64-v3/libexiv2.so.0.27.6
 /usr/lib64/glibc-hwcaps/x86-64-v3/libexiv2.so.27
-/usr/lib64/libexiv2.so.0.27.5
+/usr/lib64/libexiv2.so.0.27.6
 /usr/lib64/libexiv2.so.27
 
 %files license

@@ -5,10 +5,10 @@
 #
 %define keepstatic 1
 Name     : exiv2
-Version  : 0.27.6
-Release  : 46
-URL      : https://github.com/Exiv2/exiv2/archive/v0.27.6/exiv2-0.27.6.tar.gz
-Source0  : https://github.com/Exiv2/exiv2/archive/v0.27.6/exiv2-0.27.6.tar.gz
+Version  : 0.28.0
+Release  : 47
+URL      : https://github.com/Exiv2/exiv2/archive/v0.28.0/exiv2-0.28.0.tar.gz
+Source0  : https://github.com/Exiv2/exiv2/archive/v0.28.0/exiv2-0.28.0.tar.gz
 Summary  : Exif, Iptc and XMP metadata manipulation library and tools
 Group    : Development/Tools
 License  : BSD-3-Clause GPL-2.0
@@ -16,6 +16,7 @@ Requires: exiv2-bin = %{version}-%{release}
 Requires: exiv2-lib = %{version}-%{release}
 Requires: exiv2-license = %{version}-%{release}
 Requires: exiv2-man = %{version}-%{release}
+BuildRequires : brotli-dev
 BuildRequires : buildreq-cmake
 BuildRequires : curl-dev
 BuildRequires : doxygen
@@ -23,7 +24,7 @@ BuildRequires : expat-dev
 BuildRequires : gettext-dev
 BuildRequires : glibc-dev
 BuildRequires : googletest-dev
-BuildRequires : libssh-dev
+BuildRequires : inih-dev
 BuildRequires : zlib-dev
 # Suppress stripping binaries
 %define __strip /bin/true
@@ -78,35 +79,26 @@ Group: Default
 man components for the exiv2 package.
 
 
-%package staticdev
-Summary: staticdev components for the exiv2 package.
-Group: Default
-Requires: exiv2-dev = %{version}-%{release}
-
-%description staticdev
-staticdev components for the exiv2 package.
-
-
 %prep
-%setup -q -n exiv2-0.27.6
-cd %{_builddir}/exiv2-0.27.6
+%setup -q -n exiv2-0.28.0
+cd %{_builddir}/exiv2-0.28.0
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1682961834
+export SOURCE_DATE_EPOCH=1683641998
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
-export CFLAGS="$CFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz "
-export FCFLAGS="$FFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz "
-export FFLAGS="$FFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz "
-export CXXFLAGS="$CXXFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz "
+export CFLAGS="$CFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
+export FCFLAGS="$FFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
+export FFLAGS="$FFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
+export CXXFLAGS="$CXXFLAGS -O3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz=zstd "
 %cmake ..
 make  %{?_smp_mflags}
 popd
@@ -116,10 +108,10 @@ export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
-export CFLAGS="$CFLAGS -O3 -Wl,-z,x86-64-v3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz -march=x86-64-v3 "
-export FCFLAGS="$FFLAGS -O3 -Wl,-z,x86-64-v3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz -march=x86-64-v3 "
-export FFLAGS="$FFLAGS -O3 -Wl,-z,x86-64-v3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz -march=x86-64-v3 "
-export CXXFLAGS="$CXXFLAGS -O3 -Wl,-z,x86-64-v3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz -march=x86-64-v3 "
+export CFLAGS="$CFLAGS -O3 -Wl,-z,x86-64-v3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz=zstd -march=x86-64-v3 "
+export FCFLAGS="$FFLAGS -O3 -Wl,-z,x86-64-v3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz=zstd -march=x86-64-v3 "
+export FFLAGS="$FFLAGS -O3 -Wl,-z,x86-64-v3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz=zstd -march=x86-64-v3 "
+export CXXFLAGS="$CXXFLAGS -O3 -Wl,-z,x86-64-v3 -fdebug-types-section -femit-struct-debug-baseonly -ffat-lto-objects -flto=auto -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz=zstd -march=x86-64-v3 "
 export CFLAGS="$CFLAGS -march=x86-64-v3 -m64 -Wl,-z,x86-64-v3"
 export CXXFLAGS="$CXXFLAGS -march=x86-64-v3 -m64 -Wl,-z,x86-64-v3"
 export FFLAGS="$FFLAGS -march=x86-64-v3 -m64 -Wl,-z,x86-64-v3"
@@ -129,7 +121,7 @@ make  %{?_smp_mflags}
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1682961834
+export SOURCE_DATE_EPOCH=1683641998
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/exiv2
 cp %{_builddir}/exiv2-%{version}/COPYING %{buildroot}/usr/share/package-licenses/exiv2/be0b40ce8f9532b75966a20d14af123d3c6b05aa || :
@@ -148,40 +140,8 @@ popd
 
 %files bin
 %defattr(-,root,root,-)
-/V3/usr/bin/addmoddel
-/V3/usr/bin/exifcomment
-/V3/usr/bin/exifdata
-/V3/usr/bin/exifprint
-/V3/usr/bin/exifvalue
 /V3/usr/bin/exiv2
-/V3/usr/bin/exiv2json
-/V3/usr/bin/geotag
-/V3/usr/bin/iptceasy
-/V3/usr/bin/iptcprint
-/V3/usr/bin/metacopy
-/V3/usr/bin/mrwthumb
-/V3/usr/bin/taglist
-/V3/usr/bin/xmpdump
-/V3/usr/bin/xmpparse
-/V3/usr/bin/xmpprint
-/V3/usr/bin/xmpsample
-/usr/bin/addmoddel
-/usr/bin/exifcomment
-/usr/bin/exifdata
-/usr/bin/exifprint
-/usr/bin/exifvalue
 /usr/bin/exiv2
-/usr/bin/exiv2json
-/usr/bin/geotag
-/usr/bin/iptceasy
-/usr/bin/iptcprint
-/usr/bin/metacopy
-/usr/bin/mrwthumb
-/usr/bin/taglist
-/usr/bin/xmpdump
-/usr/bin/xmpparse
-/usr/bin/xmpprint
-/usr/bin/xmpsample
 
 %files dev
 %defattr(-,root,root,-)
@@ -206,7 +166,7 @@ popd
 /usr/include/exiv2/gifimage.hpp
 /usr/include/exiv2/http.hpp
 /usr/include/exiv2/image.hpp
-/usr/include/exiv2/ini.hpp
+/usr/include/exiv2/image_types.hpp
 /usr/include/exiv2/iptc.hpp
 /usr/include/exiv2/jp2image.hpp
 /usr/include/exiv2/jpgimage.hpp
@@ -215,6 +175,7 @@ popd
 /usr/include/exiv2/mrwimage.hpp
 /usr/include/exiv2/orfimage.hpp
 /usr/include/exiv2/pgfimage.hpp
+/usr/include/exiv2/photoshop.hpp
 /usr/include/exiv2/pngimage.hpp
 /usr/include/exiv2/preview.hpp
 /usr/include/exiv2/properties.hpp
@@ -223,14 +184,11 @@ popd
 /usr/include/exiv2/rafimage.hpp
 /usr/include/exiv2/riffvideo.hpp
 /usr/include/exiv2/rw2image.hpp
-/usr/include/exiv2/rwlock.hpp
 /usr/include/exiv2/slice.hpp
-/usr/include/exiv2/ssh.hpp
 /usr/include/exiv2/tags.hpp
 /usr/include/exiv2/tgaimage.hpp
 /usr/include/exiv2/tiffimage.hpp
 /usr/include/exiv2/types.hpp
-/usr/include/exiv2/utilsvideo.hpp
 /usr/include/exiv2/value.hpp
 /usr/include/exiv2/version.hpp
 /usr/include/exiv2/webpimage.hpp
@@ -244,10 +202,10 @@ popd
 
 %files lib
 %defattr(-,root,root,-)
-/V3/usr/lib64/libexiv2.so.0.27.6
-/V3/usr/lib64/libexiv2.so.27
-/usr/lib64/libexiv2.so.0.27.6
-/usr/lib64/libexiv2.so.27
+/V3/usr/lib64/libexiv2.so.0.28.0
+/V3/usr/lib64/libexiv2.so.28
+/usr/lib64/libexiv2.so.0.28.0
+/usr/lib64/libexiv2.so.28
 
 %files license
 %defattr(0644,root,root,0755)
@@ -258,7 +216,3 @@ popd
 %files man
 %defattr(0644,root,root,0755)
 /usr/share/man/man1/exiv2.1
-
-%files staticdev
-%defattr(-,root,root,-)
-/usr/lib64/libexiv2-xmp.a
